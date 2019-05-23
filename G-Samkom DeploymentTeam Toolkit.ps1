@@ -1,6 +1,6 @@
-﻿<# This form was created using POSHGUI.com  a free online gui designer for PowerShell
+﻿<# This form was created using bb POSHGUI.com  a free online gui designer for PowerShell
 .NAME
-    SamkomDeploymentTeam Toolkit
+    Samkom DeploymentTeam Toolkit
 #>
 
 Add-Type -AssemblyName System.Windows.Forms
