@@ -14,7 +14,7 @@ $Global:DisplayMessage="Put your message here"
 $searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
 #$loggedonuser=$env:USERNAME
 
-## Main code for the script/fix
+## Main code for the script/fixes
 
 if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
 {
