@@ -1,4 +1,4 @@
-﻿<# This form was created using bb POSHGUI.com  a free online gui designer for PowerShell
+﻿<# This form was created using POSHGUI.com  a free online gui designer for PowerShell
 .NAME
     Samkom DeploymentTeam Toolkit
 #>
