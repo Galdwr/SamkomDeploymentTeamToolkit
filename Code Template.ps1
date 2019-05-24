@@ -6,7 +6,7 @@
 # reboot, logout or exit
 $Global:ExitWay="exit"
 
-## Display message for the user
+## Display a message for the user
 # yes or no
 $Global:ShowDisplayMessage="no"
 $Global:DisplayMessage="Put your message here"
