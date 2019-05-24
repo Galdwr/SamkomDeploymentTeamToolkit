@@ -9,12 +9,15 @@ $Global:ExitWay="exit"
 $Global:ShowDisplayMessage="yes"
 $Global:DisplayMessage="P och G är nu anslutna"
 
+#$loggedonuser=$env:USERNAME
 $loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
-$loggedonuser = $User.Substring(14)
-$loggedonuser -replace '.*?\\(.*)', '$1'
+$loggedonuser = $loggedonuser.Substring(14)
+#$Credential = $loggedonuser
+$loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
+
 
 $searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
-#$loggedonuser=$env:USERNAME
+
 
 ## Main code for the fix
 
@@ -22,14 +25,21 @@ $searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
 if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
 {
 ## Execute code for Ulricehamn
-$Pdrive="\\samkom.se\users\up\" + $loggedonuser
-$Gdrive="\\samkom.se\udata"
-Net use p: $Pdrive /persistent:no
-Net use g: $Gdrive /persistent:no
+write-host "uhamn"
+$GetProcessJob = Start-Job -ScriptBlock {gpupdate.exe}
+    #$Pdrive="\\samkom.se\users\up\" + $loggedonuser
+    #$Gdrive="\\samkom.se\udata"
+    #Net use p: $Pdrive /persistent:no
+    #Net use g: $Gdrive /persistent:no
+
+Wait-Job $GetProcessJob
+
+
  }
  else 
 {
 ## Execute code for Tranemo
+write-host "tmo"
 $Pdrive="\\samkom.se\users\tp\" + $loggedonuser
 $Gdrive="\\samkom.se\tdata"
 Net use p: $Pdrive /persistent:no
