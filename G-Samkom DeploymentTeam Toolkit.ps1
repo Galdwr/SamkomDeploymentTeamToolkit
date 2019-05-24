@@ -128,7 +128,7 @@ if ($RunAsUser -eq "yes"){
     $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principal
     Register-ScheduledTask SDTT -InputObject $task
     Start-ScheduledTask -TaskName SDTT
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds $WaitforTask
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
 s

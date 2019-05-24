@@ -7,6 +7,8 @@ $Global:ExitWay="exit"
 ## Run script in users context?
 # yes or no
 $Global:RunAsUser="no"
+# If the script running in users context takes more then 5 seconds to execute, change it below
+$Global:WaitforTask = 5
 
 ## Display a message for the user
 # yes or no
