@@ -1,10 +1,12 @@
 ﻿## Samkom DeploymentTeam Toolkit Template
 
-## By default this script executes commands for the machine and not the user. Se the examples below to execute commands in the users context
-
 ## Choose exit behaviour
 # reboot, logout or exit
 $Global:ExitWay="exit"
+
+## Run script in users context?
+# yes or no
+$Global:RunAsUSer="no"
 
 ## Display a message for the user
 # yes or no
@@ -15,22 +17,26 @@ $searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
 #$loggedonuser=$env:USERNAME
 
 ## Main code for the script/fixes
-
-if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
-{
-## Execute code for Ulricehamn
-
-
- }
- else 
-{
-## Execute code for Tranemo
-
-
-}
-
-## Execute code for everyone
-
+if ($RunAsUSer -eq "yes" -and $RunningFromPowershell -eq "yes") {
+    }
+    else {
+        if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
+        {
+        ## Execute code for Ulricehamn
+        
+        
+         }
+         else 
+        {
+        ## Execute code for Tranemo
+        
+        
+        }
+        
+        ## Execute code for everyone
+        
+                
+    }
 
 
 ## ---------------------------------------------------

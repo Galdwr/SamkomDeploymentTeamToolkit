@@ -112,11 +112,24 @@ $RSQButton.Add_Click({RSQButtonClick })
 $Secret.Add_Click({ Start "https://www.youtube.com/watch?v=dQw4w9WgXcQ" })
 
 function RunButtonClick {
+$global:RunningFromPowershell = "yes"
 $RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
 $StatusListBox.items.add("Startar.....")
 
 invoke-expression -Command "& '$RunScript'"
+
+if ($RunAsUser -eq "yes"){
+
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $RunScript
+    $trigger = New-ScheduledTaskTrigger -AtLogOn
+    $principal = New-ScheduledTaskPrincipal -UserId (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)
+    $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principal
+    Register-ScheduledTask SDTK -InputObject $task
+    Start-ScheduledTask -TaskName SDTK
+    Start-Sleep -Seconds 5
+    Unregister-ScheduledTask -TaskName SDTK -Confirm:$false
+}
 
 if ($ShowDisplayMessage -eq "yes"){$RSQButton.text = $StatusListBox.items.add($DisplayMessage)}
 
