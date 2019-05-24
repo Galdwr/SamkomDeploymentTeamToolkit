@@ -116,7 +116,7 @@ $global:RunningFromPowershell = "yes"
 $RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
 $StatusListBox.items.add("Startar.....")
-
+$Logo.ImageLocation = $LoadingImagePath
 invoke-expression -Command "& '$RunScript'"
 
 if ($RunAsUser -eq "yes"){
@@ -131,7 +131,8 @@ if ($RunAsUser -eq "yes"){
     Start-Sleep -Seconds $WaitforTask
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
-s
+$Logo.ImageLocation = $ImagePath
+
 if ($ShowDisplayMessage -eq "yes"){$RSQButton.text = $StatusListBox.items.add($DisplayMessage)}
 
 if ($ExitWay -eq "exit"){$RSQButton.text = "Avsluta"} 
@@ -153,6 +154,7 @@ if ($ExitWay -eq "logout"){shutdown /l}
 
 #Write your logic code here
 $ImagePath = $PSScriptRoot + "\samkom-deployment-team-icon.png"
+$LoadingImagePath = $PSScriptRoot + "\ajax-loader.gif"
 $ImportScriptPath = $PSScriptRoot + "\scripts\"
 $AvaliableScripts = Get-ChildItem -path $ImportScriptPath | Select-Object name -ExpandProperty name | ForEach-Object {$listfixes.items.add($_)}
 
