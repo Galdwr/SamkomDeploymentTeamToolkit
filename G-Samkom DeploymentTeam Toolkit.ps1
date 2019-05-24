@@ -8,7 +8,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $Form                            = New-Object system.Windows.Forms.Form
 $Form.ClientSize                 = '398,295'
-$Form.text                       = "SamkomDeploymentTeam Toolkit"
+$Form.text                       = "Samkom DeploymentTeam Toolkit"
 $Form.BackColor                  = "#4a90e2"
 $Form.TopMost                    = $false
 

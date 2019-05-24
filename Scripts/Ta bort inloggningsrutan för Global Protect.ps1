@@ -4,15 +4,15 @@
 
 ## Choose exit behaviour
 # reboot, logout or exit
-$ExitWay="reboot"
+$Global:ExitWay="reboot"
 
 ## Display message for the user
 # yes or no
-$ShowDisplayMessage="yes"
-$DisplayMessage="Klicka på knappen nedan och starta om datorn för att slutföra reparationen"
+$Global:ShowDisplayMessage="yes"
+$Global:DisplayMessage="Klicka pï¿½ knappen nedan och starta om datorn fï¿½r att slutfï¿½ra reparationen"
 
 $searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
-$loggedonuser=$env:USERNAME
+#$loggedonuser=$env:USERNAME
 
 ## Main code for the fix
 

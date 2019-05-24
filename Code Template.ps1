@@ -29,7 +29,7 @@ if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*')
 
 }
 
-## Execute Common code
+## Execute code for everyone
 
 
 
