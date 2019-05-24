@@ -1,4 +1,4 @@
-﻿<# This form was created using bb POSHGUI.com  a free online gui designer for PowerShell
+﻿<# This form was created using POSHGUI.com  a free online gui designer for PowerShell
 .NAME
     Samkom DeploymentTeam Toolkit
 #>
@@ -8,7 +8,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $Form                            = New-Object system.Windows.Forms.Form
 $Form.ClientSize                 = '398,295'
-$Form.text                       = "SamkomDeploymentTeam Toolkit"
+$Form.text                       = "Samkom DeploymentTeam Toolkit"
 $Form.BackColor                  = "#4a90e2"
 $Form.TopMost                    = $false
 
