@@ -123,7 +123,8 @@ if ($RunAsUser -eq "yes"){
 
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $RunScript
     $trigger = New-ScheduledTaskTrigger -AtLogOn
-    $principal = New-ScheduledTaskPrincipal -UserId (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)
+    $principal = New-ScheduledTaskPrincipal -UserId $loggedonuserTask
+    #(Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)
     $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principal
     Register-ScheduledTask SDTT -InputObject $task
     Start-ScheduledTask -TaskName SDTT
