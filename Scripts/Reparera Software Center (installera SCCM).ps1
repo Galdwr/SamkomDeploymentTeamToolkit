@@ -42,7 +42,7 @@ $GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /uninstall}
 Wait-Job $GetProcessJob
 
 # Install SCCM client
-$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /mp:gsccm.samkom.se SMSSITECODE=P01}
+$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe SMSSITECODE=P01}
 Wait-Job $GetProcessJob
 
 ## ---------------------------------------------------
