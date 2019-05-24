@@ -4,15 +4,15 @@
 
 ## Choose exit behaviour
 # reboot, logout or exit
-$ExitWay="exit"
+$Global:ExitWay="exit"
 
 ## Display message for the user
 # yes or no
-$ShowDisplayMessage="yes"
-$DisplayMessage="Reparationen är klar"
+$Global:ShowDisplayMessage="yes"
+$Global:DisplayMessage="Reparationen är klar"
 
 $searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
-$loggedonuser=$env:USERNAME
+#$loggedonuser=$env:USERNAME
 
 ## Main code for the fix
 
@@ -37,10 +37,10 @@ if(!(Test-Path -Path $TARGETDIR )){
 
 Copy-Item "\\gsccm.samkom.se\Utils\SccmUtil\clientinst\*" -Destination $TARGETDIR -Recurse
 
-$GetProcessJob = Start-Job -ScriptBlock {$TARGETDIR + "\sccmsetup.exe /uninstall"}
+$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /uninstall}
 Wait-Job $GetProcessJob
 
-$GetProcessJob = Start-Job -ScriptBlock {$TARGETDIR + "\sccmsetup.exe /install"}
+$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /install}
 Wait-Job $GetProcessJob
 
 ## ---------------------------------------------------
