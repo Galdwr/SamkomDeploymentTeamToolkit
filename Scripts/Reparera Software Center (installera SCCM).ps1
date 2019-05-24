@@ -40,7 +40,7 @@ Copy-Item "\\gsccm.samkom.se\Utils\SccmUtil\clientinst\*" -Destination $TARGETDI
 $GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /uninstall}
 Wait-Job $GetProcessJob
 
-$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /install}
+$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /mp:gsccm.samkom.se SMSSITECODE=P01}
 Wait-Job $GetProcessJob
 
 ## ---------------------------------------------------
