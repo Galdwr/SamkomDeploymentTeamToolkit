@@ -93,13 +93,23 @@ $MadeBy.location                 = New-Object System.Drawing.Point(10,95)
 $MadeBy.Font                     = 'Microsoft Sans Serif,8'
 $MadeBy.ForeColor                = "#858383"
 
+$Secret                          = New-Object system.Windows.Forms.Button
+$Secret.text                     = "π"
+$Secret.BackColor                = "#e9e9eb"
+$Secret.width                    = 20
+$Secret.height                   = 20
+$Secret.location                 = New-Object System.Drawing.Point(255,93)
+$Secret.Font                     = 'Microsoft Sans Serif,8'
+$Secret.ForeColor                = "#858383"
+
 $Form.controls.AddRange(@($LogoPanel,$StatusGroupbox,$FixGroupbox))
 $FixGroupbox.controls.AddRange(@($ExecuteFixButton,$Listfixes))
 $LogoPanel.controls.AddRange(@($Logo,$TextBox1,$TextBox2))
-$StatusGroupbox.controls.AddRange(@($RSQButton,$StatusListBox,$MadeBy))
+$StatusGroupbox.controls.AddRange(@($RSQButton,$StatusListBox,$MadeBy,$Secret))
 
 $ExecuteFixButton.Add_Click({ RunButtonClick })
 $RSQButton.Add_Click({RSQButtonClick })
+$Secret.Add_Click({ Start "https://www.youtube.com/watch?v=dQw4w9WgXcQ" })
 
 function RunButtonClick {
 $RunScript = $ImportScriptPath + $ListFixes.SelectedItem
@@ -136,5 +146,6 @@ $AvaliableScripts = Get-ChildItem -path $ImportScriptPath | Select-Object name -
 $MadeBy.BorderStyle              = "0"
 $TextBox1.BorderStyle            = "0"
 $TextBox2.BorderStyle            = "0"
+$Secret.FlatAppearance.BorderSize           = "0"
 
 [void]$Form.ShowDialog()          
