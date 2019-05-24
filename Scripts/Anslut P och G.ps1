@@ -9,10 +9,15 @@ $Global:ExitWay="exit"
 $Global:ShowDisplayMessage="yes"
 $Global:DisplayMessage="P och G är nu anslutna"
 
-$searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
-$loggedonuser=$env:USERNAME
+$loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
+$loggedonuser = $User.Substring(14)
+$loggedonuser -replace '.*?\\(.*)', '$1'
+
+$searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
+#$loggedonuser=$env:USERNAME
 
 ## Main code for the fix
+
 
 if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
 {
