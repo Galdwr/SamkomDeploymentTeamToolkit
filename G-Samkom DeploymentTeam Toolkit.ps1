@@ -125,12 +125,12 @@ if ($RunAsUser -eq "yes"){
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $principal = New-ScheduledTaskPrincipal -UserId (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)
     $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principal
-    Register-ScheduledTask SDTK -InputObject $task
-    Start-ScheduledTask -TaskName SDTK
+    Register-ScheduledTask SDTT -InputObject $task
+    Start-ScheduledTask -TaskName SDTT
     Start-Sleep -Seconds 5
-    Unregister-ScheduledTask -TaskName SDTK -Confirm:$false
+    Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
-
+s
 if ($ShowDisplayMessage -eq "yes"){$RSQButton.text = $StatusListBox.items.add($DisplayMessage)}
 
 if ($ExitWay -eq "exit"){$RSQButton.text = "Avsluta"} 

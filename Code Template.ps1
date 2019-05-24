@@ -22,18 +22,17 @@ if ($RunAsUSer -eq "yes" -and $RunningFromPowershell -eq "yes") {
     else {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
         {
-        ## Execute code for Ulricehamn
+        ## Execute code for Ulricehamn users
         
         
          }
          else 
         {
-        ## Execute code for Tranemo
+        ## Execute code for Tranemo users
         
         
         }
-        
-        ## Execute code for everyone
+        ## Execute code for everyone, always put your code here if you set RunAsUser to "no"
         
                 
     }
