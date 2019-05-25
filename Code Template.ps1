@@ -26,6 +26,8 @@ $searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
 
 ## Main code for the script/fixes
 if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
+    ## If RunAsUSer is yes, this section must be used to execute code for system.
+
     }
     else {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
@@ -54,5 +56,5 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
 #Wait-Job $GetProcessJob
 
 ## Working with registry.
-# Create a key: New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks' -type Directory -Force -ErrorAction SilentlyContinue
+# Create a key: New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\PanSetup' -type Directory -Force -ErrorAction SilentlyContinue
 # Edit or create a value: New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\PanSetup]' -Name 'Prelogon' -Value "1" -PropertyType string -Force -ea SilentlyContinue;

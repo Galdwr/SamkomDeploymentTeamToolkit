@@ -33,7 +33,7 @@ if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*')
 New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks' -type Directory -Force -ErrorAction SilentlyContinue
 New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect' -type Directory -Force -ErrorAction SilentlyContinue
 New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings' -type Directory -Force -ErrorAction SilentlyContinue
-New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup]' -type Directory -Force -ErrorAction SilentlyContinue
+New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup' -type Directory -Force -ErrorAction SilentlyContinue
 
 New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks' -Name 'SetGPCPDefault' -Value "00000001" -PropertyType dword -Force -ea SilentlyContinue;
 
