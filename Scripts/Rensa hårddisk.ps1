@@ -43,7 +43,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         }
         ## Execute code for everyone
         #Clear items older then 7 days from SCCM-cache
-        $x=(New-Object -Com UIResource.UIResourceMgr).GetCacheInfo();$x.GetCacheElements()|?{$_.LastReferenceTime-lt(Get-Date).AddDays(-7)}|%{$x.DeleteCacheElement($_.CacheElementID)}
+        $x=(New-Object -Com UIResource.UIResourceMgr).GetCacheInfo();$x.GetCacheElements()|Where-Object{$_.LastReferenceTime-lt(Get-Date).AddDays(-7)}|ForEach-Object{$x.DeleteCacheElement($_.CacheElementID)}
         
         #Cleanup temp folders, IE-cache and winupdate
         Function Cleanup { 
@@ -66,7 +66,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         Clear-Host 
         
         $size = Get-ChildItem C:\Users\* -Include *.iso, *.vhd -Recurse -ErrorAction SilentlyContinue |  
-        Sort Length -Descending |  
+        Sort-Object Length -Descending |  
         Select-Object Name, 
         @{Name="Size (GB)";Expression={ "{0:N2}" -f ($_.Length / 1GB) }}, Directory | 
         Format-Table -AutoSize | Out-String 
@@ -99,8 +99,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         ## The contents of C:\users\$env:USERNAME\AppData\Local\Temp\ have been removed successfully! 
                             
         ## Remove all files and folders in user's Temporary Internet Files.  
-        Get-ChildItem "C:\users\*\AppData\Local\Microsoft\Windows\Temporary Internet Files\*" ` 
-        -Recurse -Force -Verbose -ErrorAction SilentlyContinue | 
+        Get-ChildItem "C:\users\*\AppData\Local\Microsoft\Windows\Temporary Internet Files\*" -Recurse -Force -Verbose -ErrorAction SilentlyContinue | 
         Where-Object {($_.CreationTime -le $(Get-Date).AddDays(-$DaysToDelete))} | 
         remove-item -force -recurse -ErrorAction SilentlyContinue 
         ## All Temporary Internet Files have been removed successfully! 
