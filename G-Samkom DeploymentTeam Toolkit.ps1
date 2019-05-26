@@ -121,7 +121,8 @@ invoke-expression -Command "& '$RunScript'"
 
 if ($RunAsUser -eq "yes"){
 
-    Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
+    Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
+    Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $RunScript
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $principal = New-ScheduledTaskPrincipal -UserId $loggedonuserTask

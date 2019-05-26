@@ -8,7 +8,7 @@ $Global:ExitWay="exit"
 # yes or no
 $Global:RunAsUser="no"
 # If the script running in users context takes more then 5 seconds to execute, change it below
-$Global:WaitforTask = 5
+$Global:WaitforTask = 5 # *** In the future try to replace with a start-job and wait-job
 
 ## Display a message for the user
 # yes or no
@@ -32,6 +32,8 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
     else {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
         {
+        ## When RunAsUser is yes, the three sections below will only execute code in the users context
+
         ## Execute code for Ulricehamn
         
         
