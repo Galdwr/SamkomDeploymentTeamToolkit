@@ -113,17 +113,19 @@ $Secret.Add_Click({ Start-Process"https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
 
 function RunButtonClick {
 $Logo.ImageLocation = $PSScriptRoot + "\ajax-loader.gif"
-
+write-host $PSScriptRoot + "\ajax-loader.gif"
 $global:RunningFromPowershell = "yes"
-$RunScript = $ImportScriptPath + $ListFixes.SelectedItem
+$Global:RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
 $StatusListBox.items.add("Startar.....")
 
-invoke-expression -Command "& '$RunScript'"
+$LoadFix = [scriptblock]::Create("invoke-expression -Command '$RunScript'")
+Start-job -Name LoadFix -ScriptBlock $LoadFix
+#{invoke-expression -Command "& '$RunScript'"}
+#Wait-Job -Name LoadFix
 # . $RunScript
 
 if ($RunAsUser -eq "yes"){
-    write-host "Runasuser executed"
     Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-file " + $RunScript
@@ -139,7 +141,7 @@ if ($RunAsUser -eq "yes"){
 }
 $Logo.ImageLocation = $ImagePath
 
-if ($ShowDisplayMessage -eq "yes"){$RSQButton.text = $StatusListBox.items.add($DisplayMessage)}
+if ($ShowDisplayMessage -eq "yes"){$StatusListBox.items.add($DisplayMessage)}
 
 if ($ExitWay -eq "exit"){$RSQButton.text = "Avsluta"} 
 if ($ExitWay -eq "reboot"){$RSQButton.text = "Starta om"} 
