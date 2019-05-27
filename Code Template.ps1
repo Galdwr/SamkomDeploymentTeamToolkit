@@ -18,7 +18,7 @@ $Global:DisplayMessage="Put your message here"
 #$loggedonuser=$env:USERNAME
 $loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
 $loggedonuser = $loggedonuser.Substring(14)
-$Global:loggedonuserTask
+$Global:loggedonuserTask = $loggedonuser
 #$Credential = $loggedonuser
 $loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
 

@@ -30,7 +30,7 @@ $Logo                            = New-Object system.Windows.Forms.PictureBox
 $Logo.width                      = 87
 $Logo.height                     = 62
 $Logo.location                   = New-Object System.Drawing.Point(10,10)
-$Logo.imageLocation              = $ImagePath
+$Logo.imageLocation              = $PSScriptRoot + "\samkom-deployment-team-icon.png"
 $Logo.SizeMode                   = [System.Windows.Forms.PictureBoxSizeMode]::zoom
 $Listfixes                       = New-Object system.Windows.Forms.ComboBox
 $Listfixes.width                 = 262
@@ -109,28 +109,32 @@ $StatusGroupbox.controls.AddRange(@($RSQButton,$StatusListBox,$MadeBy,$Secret))
 
 $ExecuteFixButton.Add_Click({ RunButtonClick })
 $RSQButton.Add_Click({RSQButtonClick })
-$Secret.Add_Click({ Start "https://www.youtube.com/watch?v=dQw4w9WgXcQ" })
+$Secret.Add_Click({ Start-Process"https://www.youtube.com/watch?v=dQw4w9WgXcQ" })
 
 function RunButtonClick {
+$Logo.ImageLocation = $PSScriptRoot + "\ajax-loader.gif"
+
 $global:RunningFromPowershell = "yes"
 $RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
 $StatusListBox.items.add("Startar.....")
-$Logo.ImageLocation = $LoadingImagePath
+
 invoke-expression -Command "& '$RunScript'"
+# . $RunScript
 
 if ($RunAsUser -eq "yes"){
-
+    write-host "Runasuser executed"
     Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
-    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $RunScript
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-file " + $RunScript
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $principal = New-ScheduledTaskPrincipal -UserId $loggedonuserTask
     #(Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)
     $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principal
     Register-ScheduledTask SDTT -InputObject $task
-    Start-ScheduledTask -TaskName SDTT
-    Start-Sleep -Seconds $WaitforTask
+    Start-Job -Name RunTask -ScriptBlock {Start-ScheduledTask -TaskName SDTT}
+    Wait-Job -Name RunTask
+    #Start-Sleep -Seconds $WaitforTask
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
 $Logo.ImageLocation = $ImagePath

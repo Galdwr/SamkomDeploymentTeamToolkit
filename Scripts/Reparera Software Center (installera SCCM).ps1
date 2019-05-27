@@ -5,7 +5,7 @@
 ## Choose exit behaviour
 # reboot, logout or exit
 $Global:ExitWay="exit"
-
+$Global:RunAsUser="no"
 ## Display message for the user
 # yes or no
 $Global:ShowDisplayMessage="yes"
@@ -30,24 +30,27 @@ if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*')
 }
 
 ## Execute Common code
-$TARGETDIR = 'c:\temp'
-if(!(Test-Path -Path $TARGETDIR )){
-    New-Item -ItemType directory -Path $TARGETDIR
+if(!(Test-Path -Path 'c:\temp' )){
+    New-Item -ItemType directory -Path 'c:\temp'
 }
 
-Copy-Item "\\gsccm.samkom.se\Utils\SccmUtil\clientinst\*" -Destination $TARGETDIR -Recurse
+# Copy clientfiles
+Start-Job -Name CopyFiles -ScriptBlock {Copy-Item "\\gsccm.samkom.se\Utils\SccmUtil\clientinst\*" -Destination 'c:\temp' -Recurse -ErrorAction SilentlyContinue} 
+Wait-Job -Name CopyFiles
 
 # Uninstall SCCM client
-$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe /uninstall}
-Wait-Job $GetProcessJob
+Start-Job -Name CcmUninstall -ScriptBlock {start-process C:\temp\ccmsetup.exe /uninstall -Wait}
+Wait-Job -Name CcmUninstall
+#start-process C:\temp\ccmsetup.exe /uninstall -Wait
 
 # Install SCCM client
-$GetProcessJob = Start-Job -ScriptBlock {c:\temp\ccmsetup.exe SMSSITECODE=P01}
-Wait-Job $GetProcessJob
+Start-Job -Name CcmInstall -ScriptBlock {start-process c:\temp\ccmsetup.exe SMSSITECODE=P01 -Wait}
+Wait-Job -Name CcmInstall
+#start-process c:\temp\ccmsetup.exe SMSSITECODE=P01 -Wait
+
 
 ## ---------------------------------------------------
 ## Examples
 
-## Powershell does not wait when an exe is executed. Use the following two lines to execute and wait, just duplicate if more then one exe need to be executed
-#$GetProcessJob = Start-Job -ScriptBlock {UR COMMAND HERE}
-#Wait-Job $GetProcessJob
+## Powershell does not wait when an exe is executed. Use the following line to execute and wait, just duplicate if more then one exe need to be executed
+#$GetProcessJob = Start-Job -ScriptBlock {UR COMMAND HERE} | Wait-Job

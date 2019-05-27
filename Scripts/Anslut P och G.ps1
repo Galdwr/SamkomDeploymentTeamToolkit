@@ -8,17 +8,17 @@ $Global:ExitWay="exit"
 # yes or no
 $Global:RunAsUser="yes"
 # If the script running in users context takes more then 5 seconds to execute, change it below
-$Global:WaitforTask = 5 # *** In the future try to replace with a start-job and wait-job
+$Global:WaitforTask = 30 # *** In the future try to replace with a start-job and wait-job
 
 ## Display a message for the user
 # yes or no
-$Global:ShowDisplayMessage="no"
-$Global:DisplayMessage="Put your message here"
+$Global:ShowDisplayMessage="Yes"
+$Global:DisplayMessage="P och G är nu anslutna, du kan avsluta programmet"
 
 #$loggedonuser=$env:USERNAME
 $loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
 $loggedonuser = $loggedonuser.Substring(14)
-$Global:loggedonuserTask
+$Global:loggedonuserTask = $loggedonuser
 #$Credential = $loggedonuser
 $loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
 
