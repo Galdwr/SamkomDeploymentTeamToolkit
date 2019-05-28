@@ -44,14 +44,17 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         
         }
         ## Execute code for everyone
-        Start-Job -Name Notepad1 -ScriptBlock {start-process notepad.exe -Wait} 
-        Wait-Job -Name Notepad1
+        #Start-Job -Name Notepad1 -ScriptBlock {start-process notepad.exe -Wait} 
+        #Wait-Job -Name Notepad1
                 
-        Start-Job -Name Notepad2 -ScriptBlock {start-process notepad.exe -Wait} 
-        Wait-Job -Name Notepad2
+        #Start-Job -Name Notepad2 -ScriptBlock {start-process notepad.exe -Wait} 
+        #Wait-Job -Name Notepad2
 
-        Start-Job -Name Notepad3 -ScriptBlock {start-process notepad.exe -Wait} 
-        Wait-Job -Name Notepad3
+        #Start-Job -Name Notepad3 -ScriptBlock {start-process notepad.exe -Wait} 
+        #Wait-Job -Name Notepad3
+        start-process notepad.exe -Wait
+        start-process notepad.exe -Wait
+        start-process notepad.exe -Wait
     }
 
 

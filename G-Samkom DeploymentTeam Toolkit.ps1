@@ -3,6 +3,16 @@
     Samkom DeploymentTeam Toolkit
 #>
 
+# Hide PowerShell Console
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+$consolePtr = [Console.Window]::GetConsoleWindow()
+[Console.Window]::ShowWindow($consolePtr, 0)
+
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
@@ -119,16 +129,17 @@ $Global:RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
 $StatusListBox.items.add("Startar.....")
 
-$LoadFix = [scriptblock]::Create("invoke-expression -Command '$RunScript'")
-Start-job -Name LoadFix -ScriptBlock $LoadFix
-#{invoke-expression -Command "& '$RunScript'"}
-#Wait-Job -Name LoadFix
-# . $RunScript
+#$LoadFix = [scriptblock]::Create("invoke-expression -Command '$RunScript'")
+#Start-job -Name LoadFix -ScriptBlock $LoadFix
+invoke-expression -Command "& '$RunScript'"
+
 
 if ($RunAsUser -eq "yes"){
+    $Global:RunningFromPowershell = "no"
     Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
-    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-file " + $RunScript
+    $Taskarg = "-file " + $RunScript
+    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $Taskarg
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $principal = New-ScheduledTaskPrincipal -UserId $loggedonuserTask
     #(Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)

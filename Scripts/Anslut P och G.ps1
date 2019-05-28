@@ -35,6 +35,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         ## When RunAsUser is yes, the three sections below will only execute code in the users context
 
         ## Execute code for Ulricehamn
+        write-console "uhm"
         $Pdrive="\\samkom.se\users\up\" + $loggedonuser
         $Gdrive="\\samkom.se\udata"
         Net use p: $Pdrive /persistent:no
@@ -43,6 +44,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         }
         else {
         ## Execute code for Tranemo
+        write-console "tmo"
         $Pdrive="\\samkom.se\users\tp\" + $loggedonuser
         $Gdrive="\\samkom.se\tdata"
         Net use p: $Pdrive /persistent:no
