@@ -138,7 +138,7 @@ if ($RunAsUser -eq "yes"){
     $Global:RunningFromPowershell = "no"
     Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
-    $Taskarg = "-file " + $RunScript
+    $Taskarg = "-file " + "& '$RunScript'"
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $Taskarg
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $principal = New-ScheduledTaskPrincipal -UserId $loggedonuserTask
