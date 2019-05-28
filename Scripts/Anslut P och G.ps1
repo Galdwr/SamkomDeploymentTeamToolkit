@@ -8,7 +8,6 @@ $Global:ExitWay="exit"
 # yes or no
 $Global:RunAsUser="yes"
 # If the script running in users context takes more then 5 seconds to execute, change it below
-$Global:WaitforTask = 30 # *** In the future try to replace with a start-job and wait-job
 
 ## Display a message for the user
 # yes or no
@@ -35,7 +34,6 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         ## When RunAsUser is yes, the three sections below will only execute code in the users context
 
         ## Execute code for Ulricehamn
-        write-console "uhm"
         $Pdrive="\\samkom.se\users\up\" + $loggedonuser
         $Gdrive="\\samkom.se\udata"
         Net use p: $Pdrive /persistent:no
@@ -44,7 +42,6 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         }
         else {
         ## Execute code for Tranemo
-        write-console "tmo"
         $Pdrive="\\samkom.se\users\tp\" + $loggedonuser
         $Gdrive="\\samkom.se\tdata"
         Net use p: $Pdrive /persistent:no
