@@ -41,6 +41,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
         {
         ## When RunAsUser is yes, the three sections below will only execute code in the users context
+        ## and when RunAsUser is no it executes in the systems context
 
         ## Execute code for Ulricehamn
         

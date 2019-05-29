@@ -23,13 +23,15 @@ $searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
 
 ## Main code for the script/fixes
 if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
-    ## If RunAsUSer is yes, this section must be used to execute code for system.
+    ## If RunAsUSer is yes, this section must be used to execute code for system and the possibility to execute
+    ## system commands depending on user location is not avaliable
 
     }
     else {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
         {
         ## When RunAsUser is yes, the three sections below will only execute code in the users context
+        ## and when RunAsUser is no it executes in the systems context
 
         ## Execute code for Ulricehamn
         
@@ -52,6 +54,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
 
 ## Powershell does not pause when an exe is executed. Use the following two lines to execute and pause until finished, just duplicate if more then one exe needs to be executed
 #start-process ExeFileNameHere.exe -Wait
+# Example: start-process c:\temp\ccmsetup.exe /uninstall -Wait
 
 
 ## Working with registry.
