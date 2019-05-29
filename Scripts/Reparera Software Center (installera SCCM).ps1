@@ -30,9 +30,6 @@ if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*')
 }
 
 ## Execute Common code
-if(!(Test-Path -Path 'c:\temp' )){
-    New-Item -ItemType directory -Path 'c:\temp'
-}
 
 # Copy clientfiles
 Start-Job -Name CopyFiles -ScriptBlock {Copy-Item "\\gsccm.samkom.se\Utils\SccmUtil\clientinst\*" -Destination 'c:\temp' -Recurse -ErrorAction SilentlyContinue} 

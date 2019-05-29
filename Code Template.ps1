@@ -50,8 +50,8 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
 
 ## Examples
 
-## Powershell does not pause when an exe is executed. Use the following two lines to execute and pause until finished, just duplicate if more then one exe needs to be executed
-#start-process ExeFileNameHere.exe -Wait
+## Powershell does not pause when an exe is executed. Use the following line to execute and pause until finished, just duplicate if more then one exe needs to be executed
+# start-process ExeFileNameHere.exe -Wait
 # Example: start-process c:\temp\ccmsetup.exe /uninstall -Wait
 
 ## Working with registry.
