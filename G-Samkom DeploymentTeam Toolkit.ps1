@@ -129,7 +129,7 @@ $RSQButton.Add_Click({RSQButtonClick })
 $Secret.Add_Click({ Start-Process"https://www.youtube.com/watch?v=dQw4w9WgXcQ" })
 
 function RunButtonClick {
-$Logo.ImageLocation = $PSScriptRoot + "\ajax-loader.gif"
+#$Logo.ImageLocation = $PSScriptRoot + "\ajax-loader.gif"
 $global:RunningFromPowershell = "yes"
 $Global:RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
@@ -157,7 +157,7 @@ if ($RunAsUser -eq "yes"){
     Wait-Job -Name RunTask
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
-$Logo.ImageLocation = $ImagePath
+#$Logo.ImageLocation = $ImagePath
 Stop-job -Name Working
 if ($ShowDisplayMessage -eq "yes"){$StatusListBox.items.add($DisplayMessage)}
 
