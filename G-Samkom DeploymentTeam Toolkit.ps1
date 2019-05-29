@@ -16,11 +16,15 @@
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
+
 $Form                            = New-Object system.Windows.Forms.Form
 $Form.ClientSize                 = '398,295'
 $Form.text                       = "Samkom DeploymentTeam Toolkit"
 $Form.BackColor                  = "#4a90e2"
-$Form.TopMost                    = $false
+$Form.TopMost                    = $true
+
+$CenterScreen = [System.Windows.Forms.FormStartPosition]::CenterScreen;
+$form.StartPosition = $CenterScreen;
 
 $LogoPanel                       = New-Object system.Windows.Forms.Panel
 $LogoPanel.height                = 98
@@ -42,6 +46,7 @@ $Logo.height                     = 62
 $Logo.location                   = New-Object System.Drawing.Point(10,10)
 $Logo.imageLocation              = $PSScriptRoot + "\samkom-deployment-team-icon.png"
 $Logo.SizeMode                   = [System.Windows.Forms.PictureBoxSizeMode]::zoom
+
 $Listfixes                       = New-Object system.Windows.Forms.ComboBox
 $Listfixes.width                 = 262
 $Listfixes.height                = 23
@@ -80,10 +85,11 @@ $StatusListBox.location          = New-Object System.Drawing.Point(7,15)
 $TextBox1                        = New-Object system.Windows.Forms.TextBox
 $TextBox1.multiline              = $false
 $TextBox1.text                   = "Samkom DeploymentTeam Toolkit"
-$TextBox1.width                  = 208
+$TextBox1.width                  = 210
 $TextBox1.height                 = 20
 $TextBox1.location               = New-Object System.Drawing.Point(178,20)
 $TextBox1.Font                   = 'Microsoft Sans Serif,10'
+$TextBox1.Enabled                = $false
 
 $TextBox2                        = New-Object system.Windows.Forms.TextBox
 $TextBox2.multiline              = $false
@@ -92,6 +98,7 @@ $TextBox2.width                  = 223
 $TextBox2.height                 = 20
 $TextBox2.location               = New-Object System.Drawing.Point(164,43)
 $TextBox2.Font                   = 'Microsoft Sans Serif,10'
+$TextBox2.Enabled                = $false
 
 $MadeBy                          = New-Object system.Windows.Forms.TextBox
 $MadeBy.multiline                = $false
@@ -126,10 +133,10 @@ $Logo.ImageLocation = $PSScriptRoot + "\ajax-loader.gif"
 $global:RunningFromPowershell = "yes"
 $Global:RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
-$StatusListBox.items.add("Startar.....")
+#$StatusListBox.items.add("Startar.....")
 
-#$LoadFix = [scriptblock]::Create("invoke-expression -Command '$RunScript'")
-#Start-job -Name LoadFix -ScriptBlock $LoadFix
+$Working = [scriptblock]::Create("powershell.exe " + $PSScriptRoot + "\working.ps1")
+Start-job -Name Working -ScriptBlock $Working
 invoke-expression -Command "& '$RunScript'"
 
 
@@ -151,7 +158,7 @@ if ($RunAsUser -eq "yes"){
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
 $Logo.ImageLocation = $ImagePath
-
+Stop-job -Name Working
 if ($ShowDisplayMessage -eq "yes"){$StatusListBox.items.add($DisplayMessage)}
 
 if ($ExitWay -eq "exit"){$RSQButton.text = "Avsluta"} 

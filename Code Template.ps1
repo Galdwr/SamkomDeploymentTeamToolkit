@@ -8,7 +8,7 @@ $Global:ExitWay="exit"
 # yes or no
 $Global:RunAsUser="no"
 
-## Display a message for the user
+## Display a message for the user?
 # yes or no
 $Global:ShowDisplayMessage="no"
 $Global:DisplayMessage="Put your message here"
@@ -21,7 +21,7 @@ $searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
 
 ## Main code for the script/fixes
 if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
-    ## If RunAsUSer is yes, this section must be used to execute code for system and the possibility to execute
+    ## When RunAsUSer is yes, this section must be used to execute code for system and the possibility to execute
     ## system commands depending on user location is not avaliable
 
     }
@@ -29,7 +29,7 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
         {
         ## When RunAsUser is yes, the three sections below executes code in the users context
-        ## and when RunAsUser is no it executes in the systems context
+        ## and when RunAsUser is no it's executed in the systems context
 
         ## Execute code for Ulricehamn
         
