@@ -14,7 +14,6 @@ $Global:RunAsUser="no"
 $Global:ShowDisplayMessage="no"
 $Global:DisplayMessage="Put your message here"
 
-#$loggedonuser=$env:USERNAME
 $Global:loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
 $Global:loggedonuser = $loggedonuser.Substring(14)
 $Global:loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
@@ -55,7 +54,6 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
 ## Powershell does not pause when an exe is executed. Use the following two lines to execute and pause until finished, just duplicate if more then one exe needs to be executed
 #start-process ExeFileNameHere.exe -Wait
 # Example: start-process c:\temp\ccmsetup.exe /uninstall -Wait
-
 
 ## Working with registry.
 # Create a key: New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\PanSetup' -type Directory -Force -ErrorAction SilentlyContinue
