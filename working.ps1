@@ -12,9 +12,8 @@ $Form                            = New-Object system.Windows.Forms.Form
 $Form.ClientSize                 = '398,295'
 $Form.TopMost                    = $false
 $FormImage = [system.drawing.image]::FromFile($PSScriptRoot + "\background1.png")
-$Form.BackgroundImage = $FormImage
-$form.StartPosition = $CenterScreen;
-#s$form.ControlBox = $false
+$Form.BackgroundImage            = $FormImage
+$form.StartPosition              = $CenterScreen;
 $Form.TopMost                    = $true
 
 $PictureBox1                     = New-Object system.Windows.Forms.PictureBox

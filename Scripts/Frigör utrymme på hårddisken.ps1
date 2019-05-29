@@ -13,7 +13,7 @@ $Global:WaitforTask = 5
 ## Display a message for the user
 # yes or no
 $Global:ShowDisplayMessage="no"
-$Global:DisplayMessage="Put your message here"
+$Global:DisplayMessage="Rensningen är utförd"
 
 #$loggedonuser=$env:USERNAME
 $loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
