@@ -15,18 +15,18 @@ $Global:ShowDisplayMessage="Yes"
 $Global:DisplayMessage="P och G är nu anslutna, du kan avsluta programmet"
 
 #$loggedonuser=$env:USERNAME
-$loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
-$loggedonuser = $loggedonuser.Substring(14)
-$Global:loggedonuserTask = $loggedonuser
+$Global:loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
+$Global:loggedonuser = $loggedonuser.Substring(14)
+#$Global:loggedonuserTask = $loggedonuser
 #$Credential = $loggedonuser
-$loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
+$Global:loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
 
 $searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
+
 
 ## Main code for the script/fixes
 if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
     ## If RunAsUSer is yes, this section must be used to execute code for system.
-
     }
     else {
         if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
@@ -52,7 +52,6 @@ if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
         
                 
     }
-
 
 ## ---------------------------------------------------
 

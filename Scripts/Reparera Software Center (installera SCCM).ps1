@@ -9,7 +9,7 @@ $Global:RunAsUser="no"
 ## Display message for the user
 # yes or no
 $Global:ShowDisplayMessage="yes"
-$Global:DisplayMessage="Reparationen är klar"
+$Global:DisplayMessage="Reparationen är klar, det kan ta upp till 10 minuter innan Software Center fungerar"
 
 $searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
 #$loggedonuser=$env:USERNAME
@@ -39,14 +39,10 @@ Start-Job -Name CopyFiles -ScriptBlock {Copy-Item "\\gsccm.samkom.se\Utils\SccmU
 Wait-Job -Name CopyFiles
 
 # Uninstall SCCM client
-Start-Job -Name CcmUninstall -ScriptBlock {start-process C:\temp\ccmsetup.exe /uninstall -Wait}
-Wait-Job -Name CcmUninstall
-#start-process C:\temp\ccmsetup.exe /uninstall -Wait
+start-process C:\temp\ccmsetup.exe /uninstall -Wait
 
 # Install SCCM client
-Start-Job -Name CcmInstall -ScriptBlock {start-process c:\temp\ccmsetup.exe SMSSITECODE=P01 -Wait}
-Wait-Job -Name CcmInstall
-#start-process c:\temp\ccmsetup.exe SMSSITECODE=P01 -Wait
+start-process c:\temp\ccmsetup.exe SMSSITECODE=P01 -Wait
 
 
 ## ---------------------------------------------------

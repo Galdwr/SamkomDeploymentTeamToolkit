@@ -4,14 +4,14 @@
 #>
 
 # Hide PowerShell Console
-Add-Type -Name Window -Namespace Console -MemberDefinition '
-[DllImport("Kernel32.dll")]
-public static extern IntPtr GetConsoleWindow();
-[DllImport("user32.dll")]
-public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
-'
-$consolePtr = [Console.Window]::GetConsoleWindow()
-[Console.Window]::ShowWindow($consolePtr, 0)
+#Add-Type -Name Window -Namespace Console -MemberDefinition '
+#[DllImport("Kernel32.dll")]
+#public static extern IntPtr GetConsoleWindow();
+#[DllImport("user32.dll")]
+#public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+#'
+#$consolePtr = [Console.Window]::GetConsoleWindow()
+#[Console.Window]::ShowWindow($consolePtr, 0)
 
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -123,7 +123,6 @@ $Secret.Add_Click({ Start-Process"https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
 
 function RunButtonClick {
 $Logo.ImageLocation = $PSScriptRoot + "\ajax-loader.gif"
-write-host $PSScriptRoot + "\ajax-loader.gif"
 $global:RunningFromPowershell = "yes"
 $Global:RunScript = $ImportScriptPath + $ListFixes.SelectedItem
 
@@ -136,18 +135,19 @@ invoke-expression -Command "& '$RunScript'"
 
 if ($RunAsUser -eq "yes"){
     $Global:RunningFromPowershell = "no"
+    Copy-Item $RunScript -Destination 'c:\temp' -Recurse -ErrorAction SilentlyContinue
     Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
-    $Taskarg = "-file " + "& '$RunScript'"
-    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $Taskarg
+    $Global:RunScriptTask = "c:\temp\" + $ListFixes.SelectedItem
+    $Taskarg = "-NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -file " + "`"$($RunScriptTask)`"" 
+    $action = New-ScheduledTaskAction -Execute "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe" -Argument $Taskarg
     $trigger = New-ScheduledTaskTrigger -AtLogOn
+    $Global:loggedonuserTask = $loggedonuser + "@samkom.se"
     $principal = New-ScheduledTaskPrincipal -UserId $loggedonuserTask
-    #(Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)
     $task = New-ScheduledTask -Action $action -Trigger $trigger -Principal $principal
     Register-ScheduledTask SDTT -InputObject $task
     Start-Job -Name RunTask -ScriptBlock {Start-ScheduledTask -TaskName SDTT}
     Wait-Job -Name RunTask
-    #Start-Sleep -Seconds $WaitforTask
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false
 }
 $Logo.ImageLocation = $ImagePath
@@ -177,6 +177,9 @@ $LoadingImagePath = $PSScriptRoot + "\ajax-loader.gif"
 $ImportScriptPath = $PSScriptRoot + "\scripts\"
 $AvaliableScripts = Get-ChildItem -path $ImportScriptPath | Select-Object name -ExpandProperty name | ForEach-Object {$listfixes.items.add($_)}
 
+if(!(Test-Path -Path 'c:\temp' )){
+    New-Item -ItemType directory -Path 'c:\temp'
+}
 
 #Design specifics here
 $MadeBy.BorderStyle              = "0"

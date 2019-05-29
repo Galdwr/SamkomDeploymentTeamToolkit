@@ -1,55 +1,71 @@
-## Samkom DeploymentTeam Toolkit Template
-
-## By default this script executes commands for the machine and not the user. Se the examples below to execute commands in the users context
+﻿## Samkom DeploymentTeam Toolkit Template
 
 ## Choose exit behaviour
 # reboot, logout or exit
 $Global:ExitWay="reboot"
 
-## Display message for the user
+## Run script in users context?
+# yes or no
+$Global:RunAsUser="yes"
+# If the script running in users context takes more then 5 seconds to execute, change it below
+
+## Display a message for the user
 # yes or no
 $Global:ShowDisplayMessage="yes"
-$Global:DisplayMessage="Klicka p� knappen nedan och starta om datorn f�r att slutf�ra reparationen"
+$Global:DisplayMessage="Reparationen är klar, klicka på knappen nedan för att starta om datorn"
 
-$searcher = [adsisearcher]"(samaccountname=$env:USERNAME)"
 #$loggedonuser=$env:USERNAME
+$Global:loggedonuser = tasklist /v /FI "IMAGENAME eq explorer.exe" /FO list | find "User Name:"
+$Global:loggedonuser = $loggedonuser.Substring(14)
+$Global:loggedonuser = $loggedonuser -replace '.*?\\(.*)', '$1'
 
-## Main code for the fix
+$searcher = [adsisearcher]"(samaccountname=$loggedonuser)"
 
-if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
-{
-## Execute code for Ulricehamn
+## Main code for the script/fixes
+if ($RunAsUser -eq "yes" -and $RunningFromPowershell -eq "yes") {
+    ## If RunAsUSer is yes, this section must be used to execute code for system.
+    New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks' -type Directory -Force -ErrorAction SilentlyContinue
+    New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect' -type Directory -Force -ErrorAction SilentlyContinue
+    New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings' -type Directory -Force -ErrorAction SilentlyContinue
+    New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup' -type Directory -Force -ErrorAction SilentlyContinue
 
+    New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect' -Name 'SetGPCPDefault' -Value "00000001" -PropertyType dword -Force -ea SilentlyContinue;
 
- }
- else 
-{
-## Execute code for Tranemo
+    New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings' -Name 'connect-method' -Value "pre-logon" -PropertyType string -Force -ea SilentlyContinue;
+    New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings' -Name 'use-sso' -Value "yes" -PropertyType string -Force -ea SilentlyContinue;
 
+    New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup' -Name 'Prelogon' -Value "1" -PropertyType string -Force -ea SilentlyContinue;
 
-}
+    }
+    else {
+        if ($searcher.FindOne().Properties.mail -like '*ulricehamn.se*') 
+        {
+        ## When RunAsUser is yes, the three sections below will only execute code in the users context
 
-## Execute Common code
-New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks' -type Directory -Force -ErrorAction SilentlyContinue
-New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect' -type Directory -Force -ErrorAction SilentlyContinue
-New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings' -type Directory -Force -ErrorAction SilentlyContinue
-New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup' -type Directory -Force -ErrorAction SilentlyContinue
+        ## Execute code for Ulricehamn
+        
+        
+        }
+        else {
+        ## Execute code for Tranemo
+        
+        
+        }
+        ## Execute code for everyone
+        start-process cmdkey /delete:LegacyGeneric:target=gpcp/LatestCP -Wait
+        
+                
+    }
 
-New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks' -Name 'SetGPCPDefault' -Value "00000001" -PropertyType dword -Force -ea SilentlyContinue;
-
-New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\Settings' -Name 'connect-method' -Value "pre-logon" -PropertyType string -Force -ea SilentlyContinue;
-New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\Settings' -Name 'use-sso' -Value "yes" -PropertyType string -Force -ea SilentlyContinue;
-
-New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\PanSetup]' -Name 'Prelogon' -Value "1" -PropertyType string -Force -ea SilentlyContinue;
-
-
-$GetProcessJob = Start-Job -ScriptBlock {"cmdkey /delete:LegacyGeneric:target=gpcp/LatestCP"}
-Wait-Job $GetProcessJob
 
 ## ---------------------------------------------------
+
 ## Examples
 
-## Powershell does not wait when an exe is executed. Use the following two lines to execute and wait, just duplicate if more then one exe need to be executed
+## Powershell does not pause when an exe is executed. Use the following two lines to execute and pause until finished, just duplicate if more then one exe needs to be executed
 #$GetProcessJob = Start-Job -ScriptBlock {UR COMMAND HERE}
 #Wait-Job $GetProcessJob
 
+## Working with registry.
+# Create a key: New-Item -Path 'HKLM:\SOFTWARE\Palo Alto Networks\PanSetup' -type Directory -Force -ErrorAction SilentlyContinue
+# Edit or create a value: New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Palo Alto Networks\PanSetup]' -Name 'Prelogon' -Value "1" -PropertyType string -Force -ea SilentlyContinue;
