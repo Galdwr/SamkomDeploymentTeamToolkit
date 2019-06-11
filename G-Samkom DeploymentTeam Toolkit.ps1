@@ -3,15 +3,15 @@
     Samkom DeploymentTeam Toolkit
 #>
 
-# Hide PowerShell Console
-#Add-Type -Name Window -Namespace Console -MemberDefinition '
-#[DllImport("Kernel32.dll")]
-#public static extern IntPtr GetConsoleWindow();
-#[DllImport("user32.dll")]
-#public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
-#'
-#$consolePtr = [Console.Window]::GetConsoleWindow()
-#[Console.Window]::ShowWindow($consolePtr, 0)
+ Hide PowerShell Console
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+$consolePtr = [Console.Window]::GetConsoleWindow()
+[Console.Window]::ShowWindow($consolePtr, 0)
 
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -146,7 +146,7 @@ if ($RunAsUser -eq "yes"){
     Stop-ScheduledTask -TaskName SDTT -ErrorAction SilentlyContinue
     Unregister-ScheduledTask -TaskName SDTT -Confirm:$false -ErrorAction SilentlyContinue
     $Global:RunScriptTask = "c:\temp\" + $ListFixes.SelectedItem
-    $Taskarg = "-NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -file " + "`"$($RunScriptTask)`"" 
+    $Taskarg = "-hidden -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -file " + "`"$($RunScriptTask)`"" 
     $action = New-ScheduledTaskAction -Execute "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe" -Argument $Taskarg
     $trigger = New-ScheduledTaskTrigger -AtLogOn
     $Global:loggedonuserTask = $loggedonuser + "@samkom.se"
