@@ -167,7 +167,7 @@ if ($ExitWay -eq "logout"){$RSQButton.text = "Logga ut"}
 function RSQButtonClick {
 
 if ($ExitWay -eq "exit"){$form.close()} 
-if ($ExitWay -eq "reboot"){shutdown /r /t:00} 
+if ($ExitWay -eq "reboot"){shutdown /r /t 00} 
 if ($ExitWay -eq "logout"){shutdown /l} 
 
 }
